@@ -18,7 +18,6 @@ func main() {
 	api := server.Group("/api/v1")
 	{
 		api.POST("/logs", handl.GetLog)
-		api.POST("/logs/order", handl.GetLogByNum)
 	}
 
 	server.GET("/api/v1/healthstatus", func(ctx *gin.Context) {
