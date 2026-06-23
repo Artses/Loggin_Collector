@@ -2,23 +2,29 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"loggin/internal/database"
 	"loggin/internal/handlers"
+	"loggin/internal/repository"
+	"loggin/internal/service"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	database.ConnectDatabase()
-	server := gin.Default()
+	server 	:= gin.Default()
+	repo 	:= repository.NewLogRepository()
+	serv	:= service.NewFileService(repo)
+	handl	:= handlers.NewLogHandler(serv)
+
+	api := server.Group("/api/v1")
+	{
+		api.POST("/logs", handl.GetLog)
+		api.POST("/logs/order", handl.GetLogByNum)
+	}
 
 	server.GET("/api/v1/healthstatus", func(ctx *gin.Context) {
 		ctx.JSON(200, gin.H{
 			"message": "i'm alive ;D",
 		})
-	})
-
-	server.GET("/api/v1/logs", func(ctx *gin.Context) {
-		handlers.WebsocketHandler(ctx)
 	})
 
 	fmt.Println("Servidor rodando em http://localhost:8000")
