@@ -39,17 +39,8 @@ The project follows the recommended structure for Go applications:
 ### Prerequisites
 
 - **Go** (version 1.25 or higher) installed.
-- **Docker and Docker Compose** (optional, for running the local PostgreSQL database).
 
-### Step 1: Run the Database (Optional)
-
-If you need the PostgreSQL database integrated into the overall application flow:
-
-```bash
-docker-compose up -d
-```
-
-### Step 2: Run the Go Log Collector
+### Run the Go Log Collector
 
 In the root directory of the project, run:
 
@@ -60,6 +51,7 @@ go run cmd/main.go
 The application will start on port `8000`:
 `Servidor rodando em http://localhost:8000`
 
+> Yes it's simple like that :D
 ---
 
 ## 📡 API Endpoints
