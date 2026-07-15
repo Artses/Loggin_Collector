@@ -18,13 +18,14 @@ func main() {
 	api := server.Group("/api/v1")
 	{
 		api.POST("/logs", handl.GetLog)
+
+		api.GET("/alive", func(ctx *gin.Context) {
+			ctx.JSON(200, gin.H{
+				"message": "i'm alive ;D",
+			})
+		})
 	}
 
-	server.GET("/api/v1/healthstatus", func(ctx *gin.Context) {
-		ctx.JSON(200, gin.H{
-			"message": "i'm alive ;D",
-		})
-	})
 
 	fmt.Println("Servidor rodando em http://localhost:8000")
 	server.Run(":8000")
