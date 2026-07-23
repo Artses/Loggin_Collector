@@ -5,7 +5,6 @@ import (
 	"loggin/internal/handlers"
 	"loggin/internal/repository"
 	"loggin/internal/service"
-
 	"github.com/gin-gonic/gin"
 )
 

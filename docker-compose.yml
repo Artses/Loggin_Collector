@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  log-collector:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: log-collector
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount the host logs directory.
+      # You can override HOST_LOGS_DIR in an .env file (e.g., HOST_LOGS_DIR=C:\path\to\your\logs on Windows or HOST_LOGS_DIR=/var/log on Linux).
+      # It is mounted as read-only (:ro) inside the container at /var/log/collector.
+      - "${HOST_LOGS_DIR:-./logs}:/var/log/collector:ro"
+    restart: unless-stopped
