@@ -36,22 +36,69 @@ The project follows the recommended structure for Go applications:
 
 ## 🚀 How to Run
 
-### Prerequisites
+### Option 1: Docker (Recommended for production/cross-platform)
 
-- **Go** (version 1.25 or higher) installed.
+The Docker installation mounts a folder containing host log files into the container so the API can read them.
 
-### Run the Go Log Collector
+#### 1. Setup Environment
+Define where your host log files are stored by creating a `.env` file in the root of the project, or setting the environment variable `HOST_LOGS_DIR`.
+Example `.env` file:
+```env
+# On Windows
+HOST_LOGS_DIR=C:\path\to\your\logs
 
-In the root directory of the project, run:
+# On Linux
+# HOST_LOGS_DIR=/var/log/your_app
+```
+*Note: If no path is specified, it will default to a `./logs` directory in the project root.*
 
+#### 2. Run with Docker Compose
+In the root directory, run:
 ```bash
-go run cmd/main.go
+docker-compose up -d --build
+```
+This builds the multi-stage image and mounts your logs to `/var/log/collector` inside the container as **read-only**.
+
+#### 3. Querying logs in Docker
+When querying the API via Docker, you must refer to the files using their container-internal path (`/var/log/collector/...`).
+For example, to read `C:\path\to\your\logs\app.log` (on Windows host) or `/var/log/your_app/app.log` (on Linux host), send:
+```json
+{
+  "path": "/var/log/collector/app.log",
+  "order": 0
+}
 ```
 
-The application will start on port `8000`:
-`Servidor rodando em http://localhost:8000`
+---
 
-> Yes it's simple like that :D
+### Option 2: Native Compilation
+
+#### Windows
+You can use the PowerShell helper script:
+```powershell
+# Build the binary (log-collector.exe)
+.\build.ps1 build
+
+# Build and run the service
+.\build.ps1 run
+
+# Clean up build artifacts
+.\build.ps1 clean
+```
+
+#### Linux / macOS
+You can use the `Makefile`:
+```bash
+# Build the binary (log-collector)
+make build
+
+# Build and run the service
+make run
+
+# Clean up build artifacts
+make clean
+```
+
 ---
 
 ## 📡 API Endpoints
